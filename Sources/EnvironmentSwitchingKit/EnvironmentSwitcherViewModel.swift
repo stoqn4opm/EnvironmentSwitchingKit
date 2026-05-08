@@ -97,7 +97,12 @@ public final class EnvironmentSwitcherViewModel {
     // MARK: - Outputs
 
     public var statePublisher: AnyPublisher<EnvironmentSwitcherState, Never> {
-        Just(state).merge(with: $state).removeDuplicates().eraseToAnyPublisher()
+        // `@Published.$projectedValue` already replays the current value to
+        // new subscribers on attach, so the previous `Just(state).merge(...)`
+        // dance was redundant and could deliver a stale snapshot ahead of a
+        // fast-arriving real update. `removeDuplicates` is kept to collapse
+        // no-op state writes.
+        $state.removeDuplicates().eraseToAnyPublisher()
     }
 
     public var events: AnyPublisher<EnvironmentSwitcherEvent, Never> {
