@@ -53,7 +53,18 @@ final class EnvironmentSwitcherViewController: UIViewController {
         configureTableView()
         configureActionButton()
         configureNavigationItems()
+        configureAdaptivePresentation()
         bindViewModel()
+    }
+
+    private func configureAdaptivePresentation() {
+        // Catch interactive dismissal (the swipe-down gesture on form/page
+        // sheets). When iOS dismisses the modal that way, our `.dismiss`
+        // event never fires — the user bypasses the Close button entirely.
+        // Without this hook the PresentationKit-created UIWindow stays alive
+        // on top of the app, eating touches.
+        navigationController?.presentationController?.delegate = self
+        presentationController?.delegate = self
     }
 
     // MARK: - Configuration
@@ -292,6 +303,18 @@ final class EnvironmentSwitcherViewController: UIViewController {
 
     @objc private func closeTapped() {
         viewModel.tapClose()
+    }
+}
+
+// MARK: - UIAdaptivePresentationControllerDelegate
+
+extension EnvironmentSwitcherViewController: UIAdaptivePresentationControllerDelegate {
+
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        // Interactive swipe-to-dismiss bypassed our normal `.dismiss` event,
+        // so PresentationKit's window is now invisible-but-alive on top of
+        // the app. Tear it down explicitly.
+        UIWindow.destroyPresentationKitWindow()
     }
 }
 
