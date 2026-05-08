@@ -23,6 +23,10 @@ let package = Package(
                 .product(name: "PresentationKit", package: "PresentationKit"),
             ]
         ),
+        .testTarget(
+            name: "EnvironmentSwitchingKitTests",
+            dependencies: ["EnvironmentSwitchingKit"]
+        ),
     ],
     swiftLanguageModes: [.v5]
 )
