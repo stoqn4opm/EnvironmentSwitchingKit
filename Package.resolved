@@ -1,0 +1,15 @@
+{
+  "originHash" : "6d4d0803e28e95c460d5843f79640c16b7004e7a52458c39bbfb8521940e20b7",
+  "pins" : [
+    {
+      "identity" : "presentationkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/stoqn4opm/PresentationKit",
+      "state" : {
+        "revision" : "0034e1ae856771e07ee306c973d36f721ebb3157",
+        "version" : "2.0.1"
+      }
+    }
+  ],
+  "version" : 3
+}
